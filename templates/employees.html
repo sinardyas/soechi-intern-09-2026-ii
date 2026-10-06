@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block title %}Employees | Meeting Room Booking{% endblock %}
+
+{% block content %}
+    <h2>Employees</h2>
+
+    {% set values = values | default({}) %}
+
+    <section class="form-section" aria-labelledby="add-employee-heading">
+        <h3 id="add-employee-heading">Add employee</h3>
+
+        <form class="data-form" method="post"
+              action="{{ url_for('create_employee_page') }}">
+            <div class="form-field">
+                <label for="employee-name">Name</label>
+                <input id="employee-name" name="name" type="text"
+                       value="{{ values.get('name', '') }}" required>
+            </div>
+
+            <div class="form-field">
+                <label for="employee-email">Email</label>
+                <input id="employee-email" name="email" type="text"
+                       value="{{ values.get('email', '') }}" required>
+            </div>
+
+            <div class="form-field">
+                <label for="employee-department">Department</label>
+                <input id="employee-department" name="department" type="text"
+                       value="{{ values.get('department', '') }}" required>
+            </div>
+
+            <button type="submit">Add employee</button>
+        </form>
+    </section>
+
+    {% if employees %}
+        <table>
+            <thead>
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Department</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for employee in employees %}
+                    <tr>
+                        <td>
+                            <a href="{{ url_for('employee_detail_page', employee_id=employee.id) }}">
+                                {{ employee.name }}
+                            </a>
+                        </td>
+                        <td>{{ employee.email }}</td>
+                        <td>{{ employee.department }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No employees have been added yet.</p>
+    {% endif %}
+{% endblock %}

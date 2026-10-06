@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}Rooms{% endblock %}
+
+{% block content %}
+    <h2>Rooms</h2>
+
+    <section class="room-form-section" aria-labelledby="add-room-heading">
+        <h3 id="add-room-heading">Add a room</h3>
+
+        <form class="room-form" method="post" action="{{ url_for('rooms_page') }}">
+            <div class="form-field">
+                <label for="name">Room name</label>
+                <input id="name" name="name" type="text" value="{{ values.get('name', '') }}" required>
+            </div>
+
+            <div class="form-field">
+                <label for="floor">Floor</label>
+                <input id="floor" name="floor" type="text" value="{{ values.get('floor', '') }}" required>
+            </div>
+
+            <div class="form-field">
+                <label for="capacity">Capacity</label>
+                <input id="capacity" name="capacity" type="number" min="1" value="{{ values.get('capacity', '') }}" required>
+            </div>
+
+            <button type="submit">Add room</button>
+        </form>
+    </section>
+
+    {% if rooms %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Floor</th>
+                    <th>Capacity</th>
+                    <th>Available now</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for room in rooms %}
+                    <tr>
+                        <td>
+    <a href="{{ url_for('room_detail_page', room_id=room.id) }}">
+        {{ room.name }}
+    </a>
+</td>
+                        <td>{{ room.floor }}</td>
+                        <td>{{ room.capacity }}</td>
+                        <td>{{ "Yes" if room.available_now else "No" }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No rooms have been added yet.</p>
+    {% endif %}
+{% endblock %}
